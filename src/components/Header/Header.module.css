@@ -1,0 +1,48 @@
+.Header{
+    height: 70px;
+    background-color:#3d2cd1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: snow;
+    padding: 0 50px;
+    margin-bottom: 2vh;
+}
+.Theme{
+    display: flex;
+    align-items: center;
+}
+.Toggle{
+    margin-top: 0.6vh;
+    margin-left: 10px;
+    margin-right: 50px;
+}
+.Search{
+    margin-right: 50px;
+}
+.Search:hover{
+    cursor: pointer;
+}
+.IMovies {
+    position: relative;
+}
+.IMovies:hover {
+    cursor: pointer;
+}
+
+.IMovies::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 100%;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(to right, #8a2be2, #da70d6);
+    transition: width 1s ease, right 0s 1s;
+}
+
+.IMovies:hover::after {
+    width: 100%;
+    right: 0;
+    transition: right 0s, width 1s ease;
+}

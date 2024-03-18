@@ -1,0 +1,16 @@
+.Episodes{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 92vw;
+}
+.Wrapper{
+    display: flex;
+    justify-content: center;
+    /*flex-direction: column;*/
+}
+.PaginationContainer {
+    margin-top: 20px; /* Додаємо відступ від блоку з фільмами */
+    display: flex;
+    justify-content: center;
+}

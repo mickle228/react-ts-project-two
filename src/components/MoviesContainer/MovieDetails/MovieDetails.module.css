@@ -1,0 +1,64 @@
+/* MovieDetails.module.css */
+
+.MovieDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.MovieTitle {
+    font-size: 5vw;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.MovieInfoContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.MoviePoster {
+    width: 24vw;
+    height: auto;
+    margin-right: 20px;
+}
+
+.MovieInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.MovieInfoItem {
+    margin-bottom: 20px;
+}
+
+.MovieOverview {
+    margin-top: 20px;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+.TopLeftButton {
+    color: snow;
+    background-color: #3d2cd1;
+    border: 0 solid #000000;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    justify-content: left;
+    margin-left: 50px;
+}
+
+.Recommended{
+    margin-top: 2vh;
+    font-size: 3vw;
+}
+.Btn {
+    text-decoration: none;
+}
+.Btn:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,36 @@
+.SearchContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.SearchForm {
+    text-align: center;
+}
+
+.SearchInput {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.SearchButton {
+    padding: 10px 20px;
+    margin-left: 10px;
+    background-color: #3d2cd1;
+    color: snow;
+    border: 0 solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.SearchButton:focus {
+    outline: none;
+}
+
+.SearchButton:hover {
+    scale: 1.05;
+    transition: 0.5s;
+}
