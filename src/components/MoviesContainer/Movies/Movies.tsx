@@ -2,50 +2,48 @@ import React, { FC, useEffect, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 
 import css from "./Movies.module.css";
-import {IMovie, IPaginationData, IProps} from "../../../interfaces";
-import { movieService } from "../../../services";
+import { IPaginationData, IProps } from "../../../interfaces";
 import { Genres } from "../../Genres/Genres/Genres";
 import { Movie } from "../Movie/Movie";
-import {CustomPagination} from "../../Pagination/CustomPagination";
+import { CustomPagination } from "../../Pagination/CustomPagination";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { movieActions} from "../../../store";
 
 const Movies: FC<IProps> = ({ genreIds }) => {
-    const [movies, setMovies] = useState<IMovie[]>([]);
     const [prevNext, setPrevNext] = useState<IPaginationData>({ currentPage: 1, onPageChange: () => {} });
     const location = useLocation();
     const searchText = new URLSearchParams(location.search).get("searchText") || "";
     const genreId = new URLSearchParams(location.search).get("genreId") || "";
     const [query, setQuery] = useSearchParams({ page: '1' });
-    const totalPages = 500;
+    const dispatch = useAppDispatch();
+    const { movies } = useAppSelector(state => state.movies);
+    let totalPages = 491;
 
     useEffect(() => {
         const fetchData = async () => {
             const page = parseInt(query.get('page') || '1').toString();
-            let responseData;
-
             if (searchText) {
-                responseData = await movieService.getByName(searchText, page);
+                dispatch(movieActions.getByName({ searchText, page }));
             } else if (genreId) {
-                responseData = await movieService.getByGenreIds([+genreId], page)
+                const genreIds = [+genreId];
+                dispatch(movieActions.getByGenreIds({ genreIds, page }));
             } else if (genreIds && genreIds.length > 0) {
-                responseData = await movieService.getByGenreIds(genreIds, page)
+                dispatch(movieActions.getByGenreIds({ genreIds, page }));
             } else {
-                responseData = await movieService.getAll(page);
+                dispatch(movieActions.getAll({ page }));
             }
 
-            const { data } = responseData;
-
-            setMovies(data.results);
             setPrevNext({
-                currentPage: data.page,
+                currentPage: +page,
                 onPageChange: handlePageChange
             });
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'auto' });
         };
 
         fetchData();
-    }, [searchText, query, genreId, genreIds,]);
+    }, [searchText, query, genreId, genreIds, dispatch]);
 
-    const handlePageChange = (page: number):void => {
+    const handlePageChange = (page: number): void => {
         const currentParams = new URLSearchParams(location.search);
         currentParams.set('page', page.toString());
         setQuery(currentParams);
@@ -56,7 +54,7 @@ const Movies: FC<IProps> = ({ genreIds }) => {
             {!genreIds && <Genres />}
             <div className={css.Wrapper}>
                 <div className={css.Episodes}>
-                    {movies.map((movie) => (
+                    {movies && movies.map((movie) => (
                         <Movie key={movie.id} movie={movie} />
                     ))}
                 </div>

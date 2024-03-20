@@ -9,8 +9,12 @@
     margin: 5px;
     border: 0;
     border-radius: 10px;
+    text-decoration: none;
 }
 .Btn:hover{
     cursor: pointer;
     filter: brightness(60%);
+}
+.active{
+    color: red;
 }

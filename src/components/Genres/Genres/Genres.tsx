@@ -1,22 +1,16 @@
-import React, {FC, PropsWithChildren, useEffect, useState} from "react";
+import React, {FC} from "react";
 
-import {IGenre} from "../../../interfaces";
-import {genreService} from "../../../services";
 import {Genre} from "../Genre/Genre";
 import css from './Genres.module.css'
+import {useAppSelector} from "../../hooks";
 
-interface IProps extends PropsWithChildren {
-}
 
-const Genres: FC<IProps> = () => {
+const Genres: FC = () => {
 
-    const [genres, setGenres] = useState<IGenre[]>([])
-    useEffect(() => {
-        genreService.getAll().then(({ data }) => setGenres(data.genres));
-    }, []);
+    const { genres } = useAppSelector(state => state.genres);
     return (
         <div className={css.Wrapper}>
-            {genres.map((genre) => (
+            {genres && genres.length >=1 && genres.map((genre) => (
                 <Genre key={genre.id} genre={genre} />
             ))}
         </div>

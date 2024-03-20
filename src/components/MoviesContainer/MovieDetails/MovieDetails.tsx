@@ -1,23 +1,22 @@
-import React, {FC, PropsWithChildren, useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {NavLink, useLocation, useNavigate, useParams} from "react-router-dom";
 import {Badge} from "@mui/material";
 
 import {basePosterUrl} from "../../../constants";
 import {Rating} from "../../Rating/Rating";
 import css from "./MovieDetails.module.css";
-import {genreService, movieService} from "../../../services";
 import {Movies} from "../Movies/Movies";
+import {movieActions} from "../../../store";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 
 
-interface IProps extends PropsWithChildren {
-}
-
-const MovieDetails: FC<IProps> = () => {
+const MovieDetails: FC = () => {
     const {state} = useLocation();
     const {id} = useParams();
     const navigate = useNavigate();
     const [movie, setMovie] = useState(null);
-    const [genres, setGenres] = useState([]);
+    const dispatch = useAppDispatch();
+    const {genres} = useAppSelector(state => state.genres);
 
     useEffect(() => {
         const fetchMovie = async () => {
@@ -25,23 +24,21 @@ const MovieDetails: FC<IProps> = () => {
             if (state && state.movie) {
                 movieData = state.movie;
             } else {
-                const response = await movieService.getById(+id);
-                movieData = response.data;
+                const response = await dispatch(movieActions.getById({id}));
+                movieData = response.payload;
+                console.log(movieData);
             }
             setMovie(movieData);
-
-            const genreResponse = await genreService.getAll();
-            setGenres(genreResponse.data.genres);
         };
 
         fetchMovie();
-    }, [state, id]);
+    }, [state, id, dispatch]);
 
     const back = () => {
         navigate(-1);
     };
 
-    if (!movie || genres.length === 0) {
+    if (!movie || !genres || genres.length === 0) {
         return <div>Loading...</div>;
     }
 
@@ -49,6 +46,8 @@ const MovieDetails: FC<IProps> = () => {
     const url = `${basePosterUrl}${poster_path}`;
 
     const getGenreNames = (genreIds: number[]) => {
+        if (!Array.isArray(genreIds)) return [];
+
         return genreIds.slice(0, 4).map((genreId: number) => {
             const genre = genres.find((g) => g.id === genreId);
             return genre ? genre.name : "Unknown";
@@ -60,6 +59,7 @@ const MovieDetails: FC<IProps> = () => {
         : movie.genre_ids;
 
     const genreNames: string[] = getGenreNames(genreIds);
+
     return (
         <div>
             <button onClick={back} className={css.TopLeftButton}>BACK</button>
@@ -75,7 +75,8 @@ const MovieDetails: FC<IProps> = () => {
                                     backgroundColor: "#3d2cd1",
                                     height: 30
                                 }
-                            }}>
+                            }}
+                        >
                             <img className={css.MoviePoster} src={url} alt={title}/>
                         </Badge>
                     </div>

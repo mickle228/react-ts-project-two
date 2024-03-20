@@ -1,13 +1,9 @@
-import {FC, PropsWithChildren} from "react";
+import {FC} from "react";
 import Switch from "react-switch";
 
 import {useTheme} from "../../hoc";
 
-interface IProps extends PropsWithChildren {
-
-}
-
-const Switcher: FC<IProps> = () => {
+const Switcher: FC = () => {
     const { theme, toggleTheme } = useTheme();
     return (
         <div>

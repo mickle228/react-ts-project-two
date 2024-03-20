@@ -3,17 +3,23 @@ import {useNavigate} from "react-router-dom";
 
 import css from './Header.module.css'
 import { Switcher } from "../Switcher/Switcher";
-import {useSearch} from "../../hoc";
+// import {useSearch} from "../../hoc";
 import {AccountMenu} from "../AccountMenu/AccountMenu";
+import {useAppDispatch} from "../hooks";
+import {searchActions} from "../../store";
 
 interface IProps extends PropsWithChildren {}
 
 const Header: FC<IProps> = () => {
-    const { toggleSearch } = useSearch();
+    // const { toggleSearch } = useSearch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const handleNavigate = ():void => {
         navigate('/movies');
+    };
+    const toggleSearch = ():void => {
+        dispatch(searchActions.toggleSearch())
     };
 
     return (

@@ -4,7 +4,7 @@ import {urls} from "../constants";
 import {IGenreResponse} from "../interfaces";
 
 const genreService = {
-    getAll:(page="1"):IRes<IGenreResponse> => apiService.get(urls.genres.base, {params: {page}}),
+    getAll:():IRes<IGenreResponse> => apiService.get(urls.genres.base),
 }
 
 export {
