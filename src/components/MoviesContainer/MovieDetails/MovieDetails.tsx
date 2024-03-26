@@ -8,6 +8,8 @@ import css from "./MovieDetails.module.css";
 import {Movies} from "../Movies/Movies";
 import {movieActions} from "../../../store";
 import {useAppDispatch, useAppSelector} from "../../hooks";
+import {LikeButton} from "../../LikeButton/LikeButton";
+import {TrailerModal} from "../../TrailerModal/TrailerModal";
 
 
 const MovieDetails: FC = () => {
@@ -17,7 +19,8 @@ const MovieDetails: FC = () => {
     const [movie, setMovie] = useState(null);
     const dispatch = useAppDispatch();
     const {genres} = useAppSelector(state => state.genres);
-
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    dispatch(movieActions.getTrailer({id}))
     useEffect(() => {
         const fetchMovie = async () => {
             let movieData;
@@ -26,7 +29,6 @@ const MovieDetails: FC = () => {
             } else {
                 const response = await dispatch(movieActions.getById({id}));
                 movieData = response.payload;
-                console.log(movieData);
             }
             setMovie(movieData);
         };
@@ -43,7 +45,13 @@ const MovieDetails: FC = () => {
     }
 
     const {title, poster_path, vote_average, overview, release_date} = movie;
-    const url = `${basePosterUrl}${poster_path}`;
+    let url;
+
+    if (poster_path) {
+        url = `${basePosterUrl}${poster_path}`;
+    } else {
+        url = 'https://www.prokerala.com/movies/assets/img/no-poster-available.jpg';
+    }
 
     const getGenreNames = (genreIds: number[]) => {
         if (!Array.isArray(genreIds)) return [];
@@ -60,20 +68,26 @@ const MovieDetails: FC = () => {
 
     const genreNames: string[] = getGenreNames(genreIds);
 
+    const watchTrailer = () => {
+        dispatch(movieActions.setTrailerStatus(true))
+    }
+
     return (
         <div>
             <button onClick={back} className={css.TopLeftButton}>BACK</button>
             <div className={css.MovieDetailsContainer}>
-                <div className={css.MovieTitle}>{title}</div>
+                <div className={css.TitleWrapper}>
+                    <div className={css.MovieTitle}>{title}</div>
+                </div>
                 <div className={css.MovieInfoContainer}>
                     <div>
                         <Badge
-                            badgeContent={genreNames.join(", ")}
+                            badgeContent={<LikeButton key={movie.id} movie={movie}/>}
                             sx={{
                                 "& .MuiBadge-badge": {
-                                    color: "snow",
-                                    backgroundColor: "#3d2cd1",
-                                    height: 30
+                                    color: "red",
+                                    height: 55,
+                                    transform: 'translate(-1.2vw, 0.1vh)'
                                 }
                             }}
                         >
@@ -102,6 +116,10 @@ const MovieDetails: FC = () => {
                                     </React.Fragment>
                                 ))}
                             </div>
+                        </div>
+                        <div className={css.MovieInfoItem}>
+                            <button className={css.TrailerButton} onClick={watchTrailer}>Trailer</button>
+                            <TrailerModal/>
                         </div>
                     </div>
                 </div>

@@ -14,9 +14,10 @@ const Movies: FC<IProps> = ({ genreIds }) => {
     const location = useLocation();
     const searchText = new URLSearchParams(location.search).get("searchText") || "";
     const genreId = new URLSearchParams(location.search).get("genreId") || "";
+    const liked = new URLSearchParams(location.search).get("liked") || "";
     const [query, setQuery] = useSearchParams({ page: '1' });
     const dispatch = useAppDispatch();
-    const { movies } = useAppSelector(state => state.movies);
+    const { movies, like } = useAppSelector(state => state.movies);
     let totalPages = 491;
 
     useEffect(() => {
@@ -29,6 +30,8 @@ const Movies: FC<IProps> = ({ genreIds }) => {
                 dispatch(movieActions.getByGenreIds({ genreIds, page }));
             } else if (genreIds && genreIds.length > 0) {
                 dispatch(movieActions.getByGenreIds({ genreIds, page }));
+            } else if (liked) {
+                dispatch(movieActions.getLikedMovies());
             } else {
                 dispatch(movieActions.getAll({ page }));
             }
@@ -37,11 +40,10 @@ const Movies: FC<IProps> = ({ genreIds }) => {
                 currentPage: +page,
                 onPageChange: handlePageChange
             });
-            window.scrollTo({ top: 0, behavior: 'auto' });
         };
 
         fetchData();
-    }, [searchText, query, genreId, genreIds, dispatch]);
+    }, [searchText, query, genreId, genreIds, dispatch, like]);
 
     const handlePageChange = (page: number): void => {
         const currentParams = new URLSearchParams(location.search);
@@ -49,9 +51,20 @@ const Movies: FC<IProps> = ({ genreIds }) => {
         setQuery(currentParams);
     };
 
+    const deleteLikes = () => {
+        localStorage.removeItem('likedMovies')
+        dispatch(movieActions.toogleLike())
+    }
+
     return (
         <div>
-            {!genreIds && <Genres />}
+            {!genreIds && !liked && genreId && <Genres />}
+            {(movies?.length === 0 || !movies) &&
+                <h1 className={css.Liked}>There are no liked movies. You can explore them and add here</h1>
+            }
+            <div className={css.deleteWrapper}>
+                {liked && (movies?.length === 0 || movies) && <button className={css.delete} onClick={deleteLikes}> Delete all liked movies</button>}
+            </div>
             <div className={css.Wrapper}>
                 <div className={css.Episodes}>
                     {movies && movies.map((movie) => (
@@ -59,7 +72,7 @@ const Movies: FC<IProps> = ({ genreIds }) => {
                     ))}
                 </div>
             </div>
-            {!genreIds && (
+            {!genreIds && !liked && (
                 <div className={css.PaginationContainer}>
                     <CustomPagination
                         currentPage={prevNext.currentPage}

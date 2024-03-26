@@ -7,6 +7,7 @@
     color: snow;
     padding: 0 50px;
     margin-bottom: 2vh;
+    z-index: 100;
 }
 .Theme{
     display: flex;
@@ -18,7 +19,7 @@
     margin-right: 50px;
 }
 .Search{
-    margin-right: 50px;
+    margin: 0 50px;
 }
 .Search:hover{
     cursor: pointer;
@@ -46,3 +47,25 @@
     right: 0;
     transition: right 0s, width 1s ease;
 }
+
+.Fav{
+    margin-right: 20px;
+}
+.Fav:hover{
+    cursor: pointer;
+}
+
+.DropdownMenu {
+    position: absolute;
+    right: -170%;
+    width: 20vw;
+    z-index: 10;
+    background-color: rgba(51, 51, 51, 0.9);
+}
+
+.GenresButton {
+    position: relative;
+    height: auto;
+    cursor: pointer;
+}
+

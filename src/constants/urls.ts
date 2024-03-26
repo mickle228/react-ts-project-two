@@ -10,7 +10,8 @@ const urls = {
         base:movies,
         byId:(id:number):string=>`/movie/${id}`,
         byName:(name:string):string=>`/search/movie?query=${name}`,
-        byGenres:(ids:number[]):string=>`${movies}?with_genres=${ids.join(',')}`
+        byGenres:(ids:number[]):string=>`${movies}?with_genres=${ids.join(',')}`,
+        trailer:(id:number):string=>`/movie/${id}/videos`
     },
     genres:{
         base:genres

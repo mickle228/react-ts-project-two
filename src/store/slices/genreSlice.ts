@@ -1,14 +1,17 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {IGenre, IGenreResponse} from "../../interfaces";
-import {genreService} from "../../services";
 import {AxiosError} from "axios";
 
+import {IGenre, IGenreResponse} from "../../interfaces";
+import {genreService} from "../../services";
+
 interface IState {
-    genres: IGenre[]
+    genres: IGenre[],
+    isDropdownVisible: boolean;
 }
 
 const initialState: IState = {
-    genres: []
+    genres: [],
+    isDropdownVisible: false
 };
 
 const getAll = createAsyncThunk<IGenreResponse, void>(
@@ -27,7 +30,11 @@ const getAll = createAsyncThunk<IGenreResponse, void>(
 const genreSlice = createSlice({
     name: 'genreSlice',
     initialState,
-    reducers: {},
+    reducers: {
+        setDropdownVisible: (state, action) => {
+            state.isDropdownVisible = action.payload;
+        }
+    },
     extraReducers: builder =>
         builder
             .addCase(getAll.fulfilled, (state, action) => {

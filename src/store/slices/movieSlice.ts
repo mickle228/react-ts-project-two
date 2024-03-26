@@ -1,20 +1,27 @@
 import {createAsyncThunk, createSlice, isFulfilled} from "@reduxjs/toolkit";
-import {IMovie, IResponse} from "../../interfaces";
 import {AxiosError} from "axios";
+
+import {IMovie, IResponse, ITrailer} from "../../interfaces";
 import {movieService} from "../../services";
 
 interface IState {
     movies: IMovie[],
     page: number,
     genreIds: number[],
-    movie: {}
+    movie: {},
+    like: boolean,
+    trailerStatus: boolean,
+    trailers: ITrailer
 }
 
 const initialState: IState = {
     movies: [],
     page: null,
     genreIds: null,
-    movie: null
+    movie: null,
+    like: null,
+    trailerStatus: false,
+    trailers: null
 };
 
 const getAll = createAsyncThunk<IResponse, {page:string}>(
@@ -65,17 +72,41 @@ const getById = createAsyncThunk<IResponse, {id: string}>(
         }
     }
 )
-
+const getTrailer = createAsyncThunk<ITrailer, {id: string}>(
+    'movieSlice/getTrailer',
+    async ({id}, {rejectWithValue}) => {
+        try {
+            const {data} = await movieService.getTrailer(+id);
+            const lastTrailerIndex = data.results.length - 1;
+            return data.results[lastTrailerIndex];
+        } catch (e) {
+            const err = e as AxiosError;
+            return rejectWithValue(err.response.data);
+        }
+    }
+)
 
 const movieSlice = createSlice({
     name: 'movieSlice',
     initialState,
-    reducers: {},
+    reducers: {
+        getLikedMovies: state => {
+            state.movies = JSON.parse(localStorage.getItem('likedMovies'));
+        },
+        toogleLike: state => {
+            state.like = !state.like;
+        },
+        setTrailerStatus: (state, action) => {
+            state.trailerStatus = action.payload;
+        },
+    },
     extraReducers: builder =>
         builder
             .addCase(getById.fulfilled, (state, action) => {
                 state.movie = action.payload
-                console.log(action.payload)
+            })
+            .addCase(getTrailer.fulfilled, (state, action) => {
+                state.trailers = action.payload
             })
             .addMatcher(isFulfilled(getAll, getByGenreIds, getByName), (state, action) => {
                 state.movies = action.payload.results
@@ -90,7 +121,8 @@ const movieActions = {
     getAll,
     getByGenreIds,
     getByName,
-    getById
+    getById,
+    getTrailer
 }
 
 export {

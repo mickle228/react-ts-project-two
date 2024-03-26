@@ -7,10 +7,33 @@
 .Wrapper{
     display: flex;
     justify-content: center;
-    /*flex-direction: column;*/
 }
 .PaginationContainer {
-    margin-top: 20px; /* Додаємо відступ від блоку з фільмами */
+    margin-top: 20px;
     display: flex;
     justify-content: center;
+}
+.Liked {
+    display: flex;
+    justify-content: center;
+}
+.deleteWrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+.delete {
+    display: flex;
+    justify-content: center;
+    color: snow;
+    background-color: #3d2cd1;
+    padding: 10px;
+    border: 0;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.delete:hover{
+    cursor: pointer;
+    filter: brightness(60%);
 }

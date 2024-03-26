@@ -8,6 +8,8 @@ import css from './Movie.module.css';
 import { PlayerImg } from "./PlayerImg";
 import {useAppDispatch} from "../../hooks";
 import {searchActions} from "../../../store";
+import {LikeButton} from "../../LikeButton/LikeButton";
+import {Badge} from "@mui/material";
 
 interface IProps extends PropsWithChildren {
     movie: IMovie
@@ -36,16 +38,27 @@ const Movie: FC<IProps> = ({ movie }) => {
 
     const handleImageClick = () => {
         dispatch(searchActions.setSearchVisible(false))
-        navigate(`/movie/${id}`, { state: { movie } });
+        navigate(`/movie/${id}`);
     };
 
     return (
         <div className={css.MovieСontainer}>
             <div className={css.MovieCard}>
-                <div className={css.ImageContainer} onClick={handleImageClick}>
-                    <img src={url} alt={shortenedTitle} />
-                    <PlayerImg />
-                </div>
+                <Badge
+                    badgeContent={<LikeButton key={movie.id} movie={movie}/>}
+                    sx={{
+                        "& .MuiBadge-badge": {
+                            color: "red",
+                            height: 55,
+                            transform: 'translate(-0.1vw, 0.1vh)'
+                        }
+                    }}
+                >
+                    <div className={css.ImageContainer} onClick={handleImageClick}>
+                        <img src={url} alt={shortenedTitle} />
+                        <PlayerImg />
+                    </div>
+                </Badge>
                 <Rating vote_average={vote_average} />
                 <div>{shortenedTitle}</div>
             </div>

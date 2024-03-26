@@ -1,16 +1,25 @@
-/* MovieDetails.module.css */
-
 .MovieDetailsContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
+    justify-content: center;
+}
+
+.TitleWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
 }
 
 .MovieTitle {
     font-size: 5vw;
     font-weight: bold;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .MovieInfoContainer {
@@ -61,4 +70,23 @@
 }
 .Btn:hover {
     text-decoration: underline;
+}
+
+.Like {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.TrailerButton {
+        color: snow;
+        background-color: #3d2cd1;
+        padding: 5px;
+        margin: 5px;
+        border: 0;
+        border-radius: 10px;
+        text-decoration: none;
+}
+.TrailerButton:hover{
+    cursor: pointer;
+    filter: brightness(60%);
 }
