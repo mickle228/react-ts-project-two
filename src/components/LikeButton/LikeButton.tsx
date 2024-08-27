@@ -1,5 +1,4 @@
 import React, { FC, PropsWithChildren, useState, useEffect } from "react";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Tooltip from '@mui/material/Tooltip';
 
 import { IMovie } from "../../interfaces";
